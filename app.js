@@ -10,8 +10,18 @@ loadEventListeners();
 
 // define load event listeners function
 function loadEventListeners() {
+    
     // add task event
     form.addEventListener('submit', addTask);
+
+    // remove task event
+    taskList.addEventListener('click', removeTask);
+
+    // clear tasks event
+    clearBtn.addEventListener('click', clearTasks);
+
+    // filter tasks event
+    filter.addEventListener('keyup', filterTasks);
 }
 
 // add task
@@ -46,4 +56,50 @@ function addTask(e) {
 
     // prevent defualt action
     e.preventDefault();
+}
+
+// remove task
+function removeTask(e) {
+
+    if(e.target.parentElement.classList.contains('delete-item')) {
+
+        // ask to confirm delete
+        if(confirm('Are you sure?')){
+
+            // remove entire list element if confirmed
+            e.target.parentElement.parentElement.remove();
+        }
+    }
+}
+
+// clear tasks
+function clearTasks(e) {
+
+    // remove items from the list as long as they exist
+    while(taskList.firstChild) {
+        taskList.removeChild(taskList.firstChild);
+    }
+}
+
+// filter tasks
+function filterTasks(e) {
+    
+    // capture whatever is being typed in
+    const text = e.target.value.toLowerCase();
+
+    document.querySelectorAll('.collection-item').forEach(function(task){
+        const item = task.firstChild.textContent;
+
+        // if item is in filter...
+        if(item.toLowerCase().indexOf(text) != -1){
+            
+            // display item
+            task.style.display = 'block';
+
+        } else {
+            
+            // hide item
+            task.style.display = 'none';
+        }
+    })
 }
